@@ -9,6 +9,8 @@ GameEntity = Class {
 		self = Entity.init(self, stage, x, y)
 		self.controller = controller or nil
 		self.anim = anim
+		self.aabb = {}
+		self.stage.world:add( self.aabb, 0, 0, self.anim:getWidth(), self.anim:getHeight() )
 		self.rotation = 0
 		return self
 	end,
