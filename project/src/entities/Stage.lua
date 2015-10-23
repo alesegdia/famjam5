@@ -16,24 +16,19 @@ local Class         = require (LIBRARYPATH.."hump.class")
 --------------------------------------------------------------------------------
 
 Stage = Class{
-	init = function(self, physicworld, objs)
+	init = function(self, objs)
 		self.objects = objs or {}
-		self.physicworld = physicworld
 	end,
 	register = function(self, obj)
 		self.objects[#self.objects+1] = obj
 	end,
 	update = function(self, dt)
-		self.physicworld.w:update(dt)
 		for i=#self.objects,1,-1 do
 			local v = self.objects[i]
 			if v then
 				if v.dead then
-					if v.physicbody ~= nil then
-						v.physicbody:destroy()
-					end
 					if v.remove then
-					  v:remove()
+						v:remove()
 					end
 					table.remove(self.objects, i)
 				else
