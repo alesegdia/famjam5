@@ -16,7 +16,8 @@ local Class         = require (LIBRARYPATH.."hump.class")
 --------------------------------------------------------------------------------
 
 Stage = Class{
-	init = function(self, objs)
+	init = function(self, world, objs)
+		self.world = world
 		self.objects = objs or {}
 	end,
 	register = function(self, obj)
