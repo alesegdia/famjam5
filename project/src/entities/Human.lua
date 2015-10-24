@@ -68,13 +68,13 @@ Human = Class {
 				if self.pos.x < constants.SQUAD_MIN_X or self.pos.x > constants.SQUAD_MAX_X then
 					self.direction = self.direction * -1
 				end
-				self.stage.world:move(self.aabb, self.pos.x - self.anim:getWidth()/2 + self.direction * self.vx, self.pos.y - self.anim:getHeight()/2, self.humanFilter)
+				self.stage.world:move(self.aabb, self.pos.x - self.anim:getWidth()/2 + self.direction * self.vx * dt, self.pos.y - self.anim:getHeight()/2, self.humanFilter)
 			end
 		end
 	end,
 
 	shoot = function(self)
-		local bullet = Bullet( self.stage, self.pos.x, self.pos.y, 4, constants.BULLET_HUMAN )
+		local bullet = Bullet( self.stage, self.pos.x, self.pos.y, constants.HUMAN_SHOOT_SPEED, constants.BULLET_HUMAN )
 	end
 
 }

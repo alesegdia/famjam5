@@ -26,6 +26,18 @@ Squad = Class{
 		end
 	end,
 
+	numInvaders = function(self)
+		local num_invaders = 0
+		for _,invader_row in ipairs(self.invaders) do
+			for _,invader in ipairs(invader_row) do
+				if not invader.dead then
+					num_invaders = num_invaders + 1
+				end
+			end
+		end
+		return num_invaders
+	end,
+
 	step = function(self, dt)
 		
 		self.nextDown = self.nextDown - dt
@@ -35,10 +47,11 @@ Squad = Class{
 		end
 
 
+		local mod = (128-16)/36 * (37 - self:numInvaders()) + constants.SQUAD_SPEED
 		if love.keyboard.isDown("a") then
-			self:moveHorizontal(-1 * 0.5)
+			self:moveHorizontal(-1 * mod * dt )
 		elseif love.keyboard.isDown("d") then
-			self:moveHorizontal(1 * 0.5)
+			self:moveHorizontal(1 * mod * dt)
 		end
 	end,
 

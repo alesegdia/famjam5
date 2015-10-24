@@ -23,7 +23,7 @@ Invader = Class {
 	shoot = function(self)
 		if self.cooldown <= 0 then
 			self.cooldown = constants.INVADER_COOLDOWN
-			local bullet = Bullet( self.stage, self.pos.x, self.pos.y, -4, constants.BULLET_INVADER )
+			local bullet = Bullet( self.stage, self.pos.x, self.pos.y, -constants.INVADER_SHOOT_SPEED, constants.BULLET_INVADER )
 		end
 	end
 

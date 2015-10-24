@@ -38,7 +38,7 @@ Bullet = Class {
 	end,
 
 	step = function(self, dt)
-		local aX, aY, cols, len = self.stage.world:move(self.aabb, self.pos.x - self.anim:getWidth()/2, self.pos.y + self.vy, self.colFilter)
+		local aX, aY, cols, len = self.stage.world:move(self.aabb, self.pos.x - self.anim:getWidth()/2, self.pos.y - self.anim:getHeight()/2+ self.vy * dt, self.colFilter)
 		for i=1,len do
 			local col = cols[i]
 			if col.other.isHuman and self.aabb.faction == constants.BULLET_INVADER then
