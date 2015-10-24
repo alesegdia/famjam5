@@ -18,6 +18,8 @@ Invader = Class {
 	step = function(self, dt)
 		self.dead = self.health <= 0
 		if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
+		self.tint.r = self.cooldown * 255 / constants.INVADER_COOLDOWN
+		if self.tint.r < 0 then self.tint.r = 0 end
 	end,
 
 	shoot = function(self)
