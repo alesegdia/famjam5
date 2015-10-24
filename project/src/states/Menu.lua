@@ -19,6 +19,9 @@ local selected = 0
 
 function Menu:enter()
 	love.keyboard.setKeyRepeat(false)
+	theme:stop()
+	menutheme:stop()
+	menutheme:play()
 end
 
 local prev_s = false
@@ -26,7 +29,7 @@ local prev_a = false
 local prev_space = false
 
 local tutorial = true
-local options = { "start", "story", "tutorial:" }
+local options = { "start", "instructions", "tutorial:" }
 
 function Menu:update()
 	local just_s = love.keyboard.isDown("s")
@@ -48,12 +51,12 @@ function Menu:update()
 	if not just_a then prev_a = false end
 
 	if just_space and not prev_space then
-		print("YAY!")
 		prev_space = true
 		if selected == 0 then
 			Gamestate.switch(Game)
 		elseif selected == 1 then
-
+			config_story()
+			Gamestate.switch(TextScreen)
 		elseif selected == 2 then
 			tutorial = not tutorial
 		end
