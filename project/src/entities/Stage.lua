@@ -28,6 +28,7 @@ Stage = Class{
 			local v = self.objects[i]
 			if v then
 				if v.dead then
+					if v.aabb then self.world:remove(v.aabb) end
 					if v.remove then
 						v:remove()
 					end
