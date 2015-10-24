@@ -18,6 +18,8 @@ require "src.entities.Starsfield"
 
 Game = Gamestate.new()
 
+CAM_SHAKE = 0
+
 
 -- MISC -------------------
 local color = { 255, 255, 255, 0 }
@@ -44,6 +46,9 @@ local starsfield = Starsfield()
 
 function Game:enter()
 	stage:clear()
+	menutheme:stop()
+	theme:stop()
+	theme:play()
 	squad = Squad(stage, 6, 6)
 	human = Human(stage)
 	Shield( stage, 22, 20 )
@@ -51,8 +56,8 @@ function Game:enter()
 	Shield( stage, 110, 20 )
 	Shield( stage, 154, 20 )
 	color = { 255, 255, 255, 0 }
-	cam:move(center.x/scale, center.y/scale)
-	cam:zoom(scale)
+	cam:place(center.x/scale, center.y/scale)
+	cam:zoomTo(scale)
 end
 
 local checkInvaderOverMouse = function(x,y)
@@ -85,6 +90,14 @@ function Game:update( dt )
 	timer.update(dt)
 	squad:step(dt)
 	stage:update(dt)
+	if squad:numInvaders() == 0 then
+		config_humanwin()
+		Gamestate.switch(TextScreen)
+	end
+	if CAM_SHAKE > 0 then
+		CAM_SHAKE = CAM_SHAKE - dt * 20
+	end
+	if CAM_SHAKE < 0 then CAM_SHAKE = 0 end
 end
 
 function drawHumanHealth( x, y, full_bar_size )
@@ -98,12 +111,17 @@ function drawGUI()
 end
 
 function Game:draw()
+	local cx, cy
+	cx = love.math.random() * CAM_SHAKE 
+	cy = love.math.random() * CAM_SHAKE
+	cam:place(cx + center.x/scale, cy + center.y/scale)
+	cam:zoomTo(scale)
 	cam:draw( function()
 		starsfield:draw()
 		stage:draw()
 		drawGUI()
 	end )
 	gui.core.draw()
-	love.graphics.setColor({255,0,0,255})
-	love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 50)
+	-- love.graphics.setColor({255,0,0,255})
+	-- love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 50)
 end
