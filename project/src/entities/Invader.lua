@@ -16,13 +16,14 @@ Invader = Class {
 	end,
 
 	step = function(self, dt)
+		self.dead = self.health <= 0
 		if self.cooldown > 0 then self.cooldown = self.cooldown - dt end
 	end,
 
 	shoot = function(self)
 		if self.cooldown <= 0 then
 			self.cooldown = constants.INVADER_COOLDOWN
-			local bullet = Bullet( self.stage, self.pos.x, self.pos.y, 4, constants.BULLET_INVADER )
+			local bullet = Bullet( self.stage, self.pos.x, self.pos.y, -4, constants.BULLET_INVADER )
 		end
 	end
 
