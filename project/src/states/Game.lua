@@ -43,13 +43,21 @@ local squad 	= {}
 local human 	= {}
 local starsfield = Starsfield()
 
+INVADERS_LAYOUT = nil
+LEVEL = 0
 
 function Game:enter()
 	stage:clear()
 	menutheme:stop()
 	theme:stop()
 	theme:play()
-	squad = Squad(stage, 6, 6)
+	if INVADERS_LAYOUT == nil then
+		print("newone")
+		squad = Squad(stage, 6, 6)
+	else
+		print("RELOAD!")
+		squad = Squad(stage, 6, 6, INVADERS_LAYOUT)
+	end
 	human = Human(stage)
 	Shield( stage, 22, 20 )
 	Shield( stage, 66, 20 )
@@ -90,10 +98,32 @@ function Game:update( dt )
 	timer.update(dt)
 	squad:step(dt)
 	stage:update(dt)
+
+	-- end game
+	if LEVEL >= 2 then
+		config_win()
+		Gamestate.switch(TextScreen)
+	end
+
+	-- human dies
+	if human.health <= 0 then
+		INVADERS_LAYOUT = squad:createLayout()
+		LEVEL = LEVEL + 1
+		Gamestate.switch(MidStage)
+	end
+
+	-- no more invaders
 	if squad:numInvaders() == 0 then
 		config_humanwin()
 		Gamestate.switch(TextScreen)
 	end
+
+	-- reach condition
+	if squad.height >= 6 then
+		config_reach()
+		Gamestate.switch(TextScreen)
+	end
+
 	if CAM_SHAKE > 0 then
 		CAM_SHAKE = CAM_SHAKE - dt * 20
 	end
@@ -125,3 +155,13 @@ function Game:draw()
 	-- love.graphics.setColor({255,0,0,255})
 	-- love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 50)
 end
+
+--[[
+-- 		matar humano:         100 000
+-- 		acertar humano:           100
+-- 		acertar escudo:            10
+-- 		romper escudo:            100
+-- 		crear invader:        -50 000
+-- 		mejora invader 1:      -1 000
+-- 		mejora invader 2:      -2 000
+]]--

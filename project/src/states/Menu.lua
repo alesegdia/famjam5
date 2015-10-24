@@ -20,6 +20,7 @@ local selected = 0
 function Menu:enter()
 	love.keyboard.setKeyRepeat(false)
 	theme:stop()
+	LEVEL = 0
 	menutheme:stop()
 	menutheme:play()
 end
@@ -53,6 +54,7 @@ function Menu:update()
 	if just_space and not prev_space then
 		prev_space = true
 		if selected == 0 then
+			INVADERS_LAYOUT = nil
 			Gamestate.switch(Game)
 		elseif selected == 1 then
 			config_story()

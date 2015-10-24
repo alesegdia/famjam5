@@ -13,25 +13,38 @@ Squad = Class{
 
 	nextDown = constants.SQUAD_TIME_TO_DOWN,
 
-	init = function(self, stage, slots_x, slots_y)
+	createInvaderAtSlot = function(self, x, y)
+		local img
+		if y == 1 then img = Image.i1 end
+		if y == 2 then img = Image.i2 end
+		if y == 3 then img = Image.i3 end
+		if y == 4 then img = Image.i4 end
+		if y == 5 then img = Image.i5 end
+		if y == 6 then img = Image.i6 end
+		self.invaders[x][y] = self:makeInvaderN(x * 20, 78 + y * 10, img)
+		if y == 1 then self.invaders[x][y].tint.g = 128 self.invaders[x][y].tint.b = 128 end
+		if y == 2 then self.invaders[x][y].tint.g = 192 self.invaders[x][y].tint.b = 192 end
+		if y == 3 then self.invaders[x][y].tint.g = 255 self.invaders[x][y].tint.b = 255 end
+	end,
+
+	init = function(self, stage, slots_x, slots_y, layout)
 		self.stage = stage
 		self.position = vector.new(0,0)
+		self.slots_x = slots_x
+		self.slots_y = slots_y
+		self.invaders = {}
+		self.height = 0
 
-		-- create empty array of invaders
+		print("==========")
 		for x = 1, slots_x do
 			self.invaders[x] = {}
 			for y = 1, slots_y do
-				local img
-				if y == 1 then img = Image.i1 end 
-				if y == 2 then img = Image.i2 end 
-				if y == 3 then img = Image.i3 end 
-				if y == 4 then img = Image.i4 end 
-				if y == 5 then img = Image.i5 end 
-				if y == 6 then img = Image.i6 end 
-				self.invaders[x][y] = self:makeInvaderN(x * 20, 78 + y * 10, img)
-				if y == 1 then self.invaders[x][y].tint.g = 128 self.invaders[x][y].tint.b = 128 end
-				if y == 2 then self.invaders[x][y].tint.g = 192 self.invaders[x][y].tint.b = 192 end
-				if y == 3 then self.invaders[x][y].tint.g = 255 self.invaders[x][y].tint.b = 255 end
+				self:createInvaderAtSlot(x, y)
+				if layout ~= nil then
+					if not layout[x][y].isPresent then
+						self.invaders[x][y].dead = true
+					end
+				end
 			end
 		end
 	end,
@@ -48,8 +61,24 @@ Squad = Class{
 		return num_invaders
 	end,
 
+	createLayout = function(self)
+		local layout = {}
+		local i = 0
+		for x = 1, self.slots_x do
+			layout[x] = {}
+			for y = 1, self.slots_y do
+				print("selfinvxy: ", self.invaders[x][y])
+				print("selfdead: ", self.invaders[x][y].dead)
+				layout[x][y] = {isPresent = self.invaders[x][y] and not self.invaders[x][y].dead}
+				print(layout[x][y].isPresent)
+				print("=========")
+			end
+		end
+		return layout
+	end,
+
 	step = function(self, dt)
-		
+
 		self.nextDown = self.nextDown - dt
 		if self.nextDown <= 0 then
 			self.nextDown = constants.SQUAD_TIME_TO_DOWN
@@ -76,6 +105,7 @@ Squad = Class{
 				end
 			end
 		end
+		self.height = self.height + 1
 	end,
 	
 	addInvader = function( self, invader )
@@ -133,7 +163,6 @@ Squad = Class{
 				end
 			end
 		end
-		print(canMove)
 		return canMove
 	end
 	
