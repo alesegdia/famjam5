@@ -13,6 +13,8 @@ local constants 	= require ("constants")
 require "src.entities.Stage"
 require "src.entities.GameEntity"
 require "src.entities.Squad"
+require "src.entities.Human"
+require "src.entities.Starsfield"
 
 Game = Gamestate.new()
 
@@ -36,11 +38,14 @@ local world 	= bump.newWorld(8)
 local stage 	= Stage(world)
 local cam 		= camera.new(0,0,1,0)
 local squad 	= {}
+local human 	= {}
+local starsfield = Starsfield()
 
 
 function Game:enter()
 	stage:clear()
 	squad = Squad(stage, 6, 6)
+	human = Human(stage)
 	color = { 255, 255, 255, 0 }
 	cam:move(center.x/scale, center.y/scale)
 	cam:zoom(scale)
@@ -49,27 +54,49 @@ end
 local checkInvaderOverMouse = function(x,y)
 	x, y = cam:worldCoords( x, y )
 	local items, len = world:queryPoint( x, y, function(item) return item.isInvader end )
-	print(len)
 	if len ~= 0 then
 		local invader = items[len].entity
 		invader:shoot()
 	end
 end
 
+local mousePressed = false
 function Game:mousepressed()
-	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY() )
+	mousePressed = true
 end
 
+function Game:mousereleased()
+	mousePressed = false
+end
+
+function Game:mousemoved()
+	if mousePressed then
+		checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY() )
+	end
+end
 
 function Game:update( dt )
+	starsfield:update(dt)
 	timer.update(dt)
 	squad:step(dt)
 	stage:update(dt)
 end
 
+function drawHumanHealth( x, y, full_bar_size )
+	local current_bar_size = human.health * full_bar_size / constants.HUMAN_HEALTH
+	love.graphics.setColor(0, 255, 0, 255)
+	love.graphics.rectangle("fill", x, y, current_bar_size, 2)
+end
+
+function drawGUI()
+	drawHumanHealth( 8, 144, 184 )
+end
+
 function Game:draw()
 	cam:draw( function()
+		starsfield:draw()
 		stage:draw()
+		drawGUI()
 	end )
 	gui.core.draw()
 	love.graphics.setColor({255,0,0,255})
