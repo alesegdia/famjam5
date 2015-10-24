@@ -21,7 +21,7 @@ Squad = Class{
 		for x = 1, slots_x do
 			self.invaders[x] = {}
 			for y = 1, slots_y do
-				self.invaders[x][y] = self:makeInvader1(x * 20, y * 10)
+				self.invaders[x][y] = self:makeInvader1(x * 20, 78 + y * 10)
 			end
 		end
 	end,
@@ -47,8 +47,10 @@ Squad = Class{
 		end
 		for _,invader_row in ipairs(self.invaders) do
 			for _,invader in ipairs(invader_row) do
-				local x, y = self.stage.world:getRect(invader.aabb)
-				self.stage.world:move(invader.aabb, x, y + constants.SQUAD_DOWN_DISTANCE, filter)
+				if not invader.dead then
+					local x, y = self.stage.world:getRect(invader.aabb)
+					self.stage.world:move(invader.aabb, x, y - constants.SQUAD_DOWN_DISTANCE, filter)
+				end
 			end
 		end
 	end,
@@ -79,8 +81,10 @@ Squad = Class{
 		if self:canMoveHorizontal( dx ) then
 			for _,invader_row in ipairs(self.invaders) do
 				for _,invader in ipairs(invader_row) do
-					local x, y = self.stage.world:getRect(invader.aabb)
-					self.stage.world:move(invader.aabb, x + dx, y, self.invaderFilter)
+					if not invader.dead then
+						local x, y = self.stage.world:getRect(invader.aabb)
+						self.stage.world:move(invader.aabb, x + dx, y, self.invaderFilter)
+					end
 				end
 			end
 		end
