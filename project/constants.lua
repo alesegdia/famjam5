@@ -1,8 +1,22 @@
 
 local Constants = {
-	SQUAD_TIME_TO_DOWN = 1,
-	SQUAD_DOWN_DISTANCE = 10,
-	SHIELD_HEALTH = 5,
+	
+	-- SQUAD
+	SQUAD_TIME_TO_DOWN 		= 5,
+	SQUAD_DOWN_DISTANCE 	= 10,
+	SQUAD_MIN_X 			= 8,
+	SQUAD_MAX_X 			= 192,
+
+	-- INVADER
+	INVADER_COOLDOWN 		= 3,
+
+	-- SHIELD
+	SHIELD_HEALTH 			= 5,
+
+	-- BULLETS
+	BULLET_HUMAN 			= 0xDEADBEEF,
+	BULLET_INVADER 			= 0xFACEFEED,
+
 }
 
 return Constants
