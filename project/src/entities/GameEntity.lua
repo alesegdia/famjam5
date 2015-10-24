@@ -5,11 +5,12 @@ require "src.entities.Entity"
 require (LIBRARYPATH.."AnAL")
 
 GameEntity = Class {
-	init = function(self, stage, x, y, anim, controller)
+	init = function(self, stage, x, y, anim, aabb, controller)
 		self = Entity.init(self, stage, x, y)
 		self.controller = controller or nil
 		self.anim = anim
-		self.aabb = {}
+		self.aabb = aabb
+		self.aabb.entity = self
 		self.stage.world:add( self.aabb, x, y, self.anim:getWidth(), self.anim:getHeight() )
 		self.rotation = 0
 		return self
