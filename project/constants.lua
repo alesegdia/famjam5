@@ -2,7 +2,7 @@
 local Constants = {
 	
 	-- SQUAD
-	SQUAD_TIME_TO_DOWN 		= 5,
+	SQUAD_TIME_TO_DOWN 		= 15,
 	SQUAD_DOWN_DISTANCE 	= 10,
 	SQUAD_MIN_X 			= 8,
 	SQUAD_MAX_X 			= 192,
@@ -21,7 +21,7 @@ local Constants = {
 	HUMAN_SHOOT_SPEED 		= 128,
 
 	-- SHIELD
-	SHIELD_HEALTH 			= 5,
+	SHIELD_HEALTH 			= 64,
 
 	-- BULLETS
 	BULLET_HUMAN 			= 0xDEADBEEF,
