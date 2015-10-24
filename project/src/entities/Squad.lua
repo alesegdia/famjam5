@@ -21,7 +21,17 @@ Squad = Class{
 		for x = 1, slots_x do
 			self.invaders[x] = {}
 			for y = 1, slots_y do
-				self.invaders[x][y] = self:makeInvader1(x * 20, 78 + y * 10)
+				local img
+				if y == 1 then img = Image.i1 end 
+				if y == 2 then img = Image.i2 end 
+				if y == 3 then img = Image.i3 end 
+				if y == 4 then img = Image.i4 end 
+				if y == 5 then img = Image.i5 end 
+				if y == 6 then img = Image.i6 end 
+				self.invaders[x][y] = self:makeInvaderN(x * 20, 78 + y * 10, img)
+				if y == 1 then self.invaders[x][y].tint.g = 128 self.invaders[x][y].tint.b = 128 end
+				if y == 2 then self.invaders[x][y].tint.g = 192 self.invaders[x][y].tint.b = 192 end
+				if y == 3 then self.invaders[x][y].tint.g = 255 self.invaders[x][y].tint.b = 255 end
 			end
 		end
 	end,
@@ -82,6 +92,13 @@ Squad = Class{
 		return Invader( self.stage, x, y, invader1_anim )
 	end,
 
+	makeInvaderN = function ( self, x, y, img )
+		local invader1_anim = newAnimation( img, 8, 8, 0.2, 2 )
+		invader1_anim:addFrame( 0, 0, 8, 8, 0.2 )
+		invader1_anim:addFrame( 8, 0, 8, 8, 0.2 )
+		return Invader( self.stage, x, y, invader1_anim )
+	end,
+
 	invaderFilter = function (item, other)
 		if other.isBullet then
 			if other.entity.faction == constants.BULLET_INVADER then
@@ -107,13 +124,16 @@ Squad = Class{
 		local canMove = true
 		for _,invader_row in ipairs(self.invaders) do
 			for _,invader in ipairs(invader_row) do
-				local newpos = invader.pos.x + dx
-				if newpos < constants.SQUAD_MIN_X or newpos > constants.SQUAD_MAX_X then
-					canMove = false
-					break
+				if not invader.dead then
+					local newpos = invader.pos.x + dx
+					if newpos < constants.SQUAD_MIN_X or newpos > constants.SQUAD_MAX_X then
+						canMove = false
+						break
+					end
 				end
 			end
 		end
+		print(canMove)
 		return canMove
 	end
 	
