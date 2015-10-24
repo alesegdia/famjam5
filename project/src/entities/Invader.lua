@@ -9,6 +9,7 @@ require "src.entities.Bullet"
 Invader = Class {
 
 	cooldown = 0,
+	health = 1,
 
 	init = function(self, stage, x, y, invader_anim)
 		self = GameEntity.init(self, stage, x, y, invader_anim, { isInvader = true }, self.step)
