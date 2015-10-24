@@ -8,6 +8,7 @@ GameEntity = Class {
 	init = function(self, stage, x, y, anim, aabb, controller)
 		self = Entity.init(self, stage, x, y)
 		self.controller = controller or nil
+		self.tint = { r=255, g=255, b=255 }
 		self.anim = anim
 		self.aabb = aabb
 		self.aabb.entity = self
@@ -25,6 +26,7 @@ GameEntity = Class {
 	draw = function(self)
 		love.graphics.setColor({255,255,255,255})
 		if self.anim ~= nil then
+			love.graphics.setColor(self.tint.r, self.tint.g, self.tint.b, 255)
 			self.anim:draw(self.pos.x,self.pos.y, self.rotation, 1, 1, self.anim.fw/2, self.anim.fh/2)
 		end
 		--[[
