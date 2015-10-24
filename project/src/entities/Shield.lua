@@ -16,7 +16,7 @@ Shield = Class {
 	health = constants.SHIELD_HEALTH,
 
 	init = function(self, stage, x, y)
-		self = GameEntity(self, stage, x, y, shield_anim_1, self.step )
+		self = GameEntity(self, stage, x, y, shield_anim_1, { isShield = true }, self.step )
 	end,
 
 	step = function(self, dt)
@@ -26,3 +26,5 @@ Shield = Class {
 		self.anim = shields_anim[selected_anim_index]
 	end
 }
+
+Shield:include(GameEntity)
