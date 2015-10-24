@@ -29,8 +29,8 @@ local center = {
 
 local scale = 4
 
-local bigFont   = love.graphics.newFont(32)
-local smallFont = love.graphics.newFont(16)
+local bigFont   = love.graphics.newFont("space_invaders.ttf", 32)
+local smallFont = love.graphics.newFont("space_invaders.ttf", 16)
 
 
 -- GAME -------------------
@@ -46,6 +46,10 @@ function Game:enter()
 	stage:clear()
 	squad = Squad(stage, 6, 6)
 	human = Human(stage)
+	Shield( stage, 22, 20 )
+	Shield( stage, 66, 20 )
+	Shield( stage, 110, 20 )
+	Shield( stage, 154, 20 )
 	color = { 255, 255, 255, 0 }
 	cam:move(center.x/scale, center.y/scale)
 	cam:zoom(scale)
@@ -63,6 +67,7 @@ end
 local mousePressed = false
 function Game:mousepressed()
 	mousePressed = true
+	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY() )
 end
 
 function Game:mousereleased()
@@ -89,7 +94,7 @@ function drawHumanHealth( x, y, full_bar_size )
 end
 
 function drawGUI()
-	drawHumanHealth( 8, 144, 184 )
+	drawHumanHealth( 8, 3, 184 )
 end
 
 function Game:draw()
