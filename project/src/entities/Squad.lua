@@ -94,7 +94,6 @@ Squad = Class{
 	
 	canMoveHorizontal = function( self, dx )
 		local canMove = true
-		print(self.invaders)
 		for _,invader_row in ipairs(self.invaders) do
 			for _,invader in ipairs(invader_row) do
 				local newpos = invader.pos.x + dx
