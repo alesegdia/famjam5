@@ -33,7 +33,7 @@ Starsfield = Class {
 
 	draw = function(self)
 		for _,v in ipairs(self.stars) do
-			love.graphics.setColor(255,255,255,255 - 64 * (3-v.index))
+			love.graphics.setColor(255,255,255,192 - 64 * (3-v.index))
 			love.graphics.rectangle("fill", v.x, v.y, v.index * 0.3, v.index * 0.3)
 		end
 	end
