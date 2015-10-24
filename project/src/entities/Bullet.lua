@@ -8,7 +8,12 @@ require "src.entities.GameEntity"
 Bullet = Class {
 	
 	init = function(self, stage, x, y, vy, faction)
-		local anim = newAnimation( Image.bala1x2, 1, 2, 0.2, 1 )
+		local anim
+		if faction == constants.BULLET_INVADER then
+			anim = newAnimation( Image.bala1x2, 1, 2, 0.2, 1 )
+		else
+			anim = newAnimation( Image.bala2x2, 2, 2, 0.2, 1 )
+		end
 		self = GameEntity.init(self, stage, x, y, anim, { isBullet = true, faction = faction }, self.step )
 		assert( faction == constants.BULLET_HUMAN or faction == constants.BULLET_INVADER, "Bullet faction must be one of: BULLET_HUMAN or BULLET_INVADER" )
 		self.vy = vy
@@ -27,6 +32,8 @@ Bullet = Class {
 			elseif item.faction == constants.BULLET_HUMAN then
 				return nil
 			end
+		elseif other.isShield then
+			return "cross"
 		end
 	end,
 
@@ -40,6 +47,9 @@ Bullet = Class {
 			elseif col.other.isInvader and self.aabb.faction == constants.BULLET_HUMAN then
 				self.dead = true
 				col.other.entity.health = col.other.entity.health - 1
+			elseif col.other.isShield then
+				col.other.entity.health = col.other.entity.health - 1
+				self.dead = true
 			end
 		end
 	end
