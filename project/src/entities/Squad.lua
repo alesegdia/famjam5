@@ -22,7 +22,6 @@ Squad = Class{
 			self.invaders[x] = {}
 			for y = 1, slots_y do
 				self.invaders[x][y] = self:makeInvader1(x * 20, y * 10)
-				self.invaders[x][y].aabb.isInvader = true
 			end
 		end
 	end,
@@ -45,7 +44,6 @@ Squad = Class{
 
 	moveBlockDown = function(self)
 		local filter = function(item, other)
-			print(item.isInvader)
 		end
 		for _,invader_row in ipairs(self.invaders) do
 			for _,invader in ipairs(invader_row) do
@@ -69,6 +67,14 @@ Squad = Class{
 		return Invader( self.stage, x, y, invader1_anim )
 	end,
 
+	invaderFilter = function (item, other)
+		if other.isBullet then
+			if other.entity.faction == constants.BULLET_INVADER then
+				return nil
+			end
+		end
+	end,
+
 	moveHorizontal = function( self, dx )
 		local filter = function(item, other)
 			if 		other.isInvader 	then return "cross"
@@ -80,31 +86,22 @@ Squad = Class{
 			for _,invader_row in ipairs(self.invaders) do
 				for _,invader in ipairs(invader_row) do
 					local x, y = self.stage.world:getRect(invader.aabb)
-					self.stage.world:move(invader.aabb, x + dx, y)
+					self.stage.world:move(invader.aabb, x + dx, y, self.invaderFilter)
 				end
 			end
 		end
 	end,
 	
 	canMoveHorizontal = function( self, dx )
-		local filter = function(item, other)
-			if 		other.isInvader 	then return "cross"
-			elseif 	other.isBleh 		then return "touch"
-			else return nil
-			end
-		end
 		local canMove = true
 		print(self.invaders)
 		for _,invader_row in ipairs(self.invaders) do
 			for _,invader in ipairs(invader_row) do
-				--[[
-				local x, y = self.stage.world:getRect(invader.aabb)
-				local aX, aY, cols, len = world:check(self.aabb, x + dx, y)
-				if len ~= 0 then
+				local newpos = invader.pos.x + dx
+				if newpos < constants.SQUAD_MIN_X or newpos > constants.SQUAD_MAX_X then
 					canMove = false
 					break
 				end
-				]]--
 			end
 		end
 		return canMove

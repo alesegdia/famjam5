@@ -8,6 +8,7 @@ local timer 		= require (LIBRARYPATH.."hump.timer")
 local tween         = timer.tween
 local camera 		= require (LIBRARYPATH.."hump.camera")
 local bump 			= require (LIBRARYPATH.."bump")
+local constants 	= require ("constants")
 
 require "src.entities.Stage"
 require "src.entities.GameEntity"
@@ -44,6 +45,21 @@ function Game:enter()
 	cam:move(center.x/scale, center.y/scale)
 	cam:zoom(scale)
 end
+
+local checkInvaderOverMouse = function(x,y)
+	x, y = cam:worldCoords( x, y )
+	local items, len = world:queryPoint( x, y, function(item) return item.isInvader end )
+	print(len)
+	if len ~= 0 then
+		local invader = items[len].entity
+		invader:shoot()
+	end
+end
+
+function Game:mousepressed()
+	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY() )
+end
+
 
 function Game:update( dt )
 	timer.update(dt)
