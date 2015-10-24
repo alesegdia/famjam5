@@ -37,13 +37,18 @@ local function Proxy(f)
 	end})
 end
 
+GAME_SCORE = 0
+
 -- some standard proxies
 Image   = Proxy(function(k) return love.graphics.newImage('img/' .. k .. '.png') end)
 Sfx     = Proxy(function(k) return love.audio.newSource('sfx/' .. k .. '.ogg', 'static') end)
 Music   = Proxy(function(k) return love.audio.newSource('music/' .. k .. '.ogg', 'stream') end)
 
-theme = love.audio.newSource("music/matar_terricolas.mp3", "stream")
+theme = love.audio.newSource("music/ingame.ogg", "stream")
 theme:setLooping(true)
+
+menutheme = love.audio.newSource("music/menu.ogg", "stream")
+menutheme:setLooping(true)
 
 --[[ usage:
     love.graphics.draw(Image.background)
@@ -77,7 +82,6 @@ function love.load(arg)
 	-- love.mouse.setVisible(false)
     -- print "Require Sources:"
 	recursiveRequire("src")
-	theme:play()
 	Gamestate.registerEvents()
 	Gamestate.switch(Menu)
 end
