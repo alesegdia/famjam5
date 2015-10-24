@@ -47,6 +47,7 @@ end
 
 function Game:update( dt )
 	timer.update(dt)
+	squad:step(dt)
 	stage:update(dt)
 end
 
