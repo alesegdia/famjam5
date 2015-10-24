@@ -49,6 +49,7 @@ Human = Class {
 	end,
 
 	step = function(self, dt)
+		if self.health <= 0 then self.dead = true end
 		if self.state == "shooting" then
 			self.nextShot = self.nextShot - dt
 			if self.nextShot <= 0 then
