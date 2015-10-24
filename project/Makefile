@@ -12,7 +12,7 @@ osxapp=/Applications/love.app/
 
 game=SredaVniecaps
 sources=main.lua src/**/*.lua libs/**/*.lua **/*.lua *.lua
-res=img/*.* music/*.* sfx/*.* # *.ttf
+res=img/*.* music/*.* sfx/*.* *.ttf
 
 .PHONY : run test love clean win
 
