@@ -27,6 +27,7 @@ GameEntity = Class {
 		if self.anim ~= nil then
 			self.anim:draw(self.pos.x,self.pos.y, self.rotation, 1, 1, self.anim.fw/2, self.anim.fh/2)
 		end
+		--[[
 		if self.aabb ~= nil then
 			local x, y, w, h = self.stage.world:getRect(self.aabb)
 			love.graphics.setColor(255, 255, 255, 255)
@@ -34,6 +35,7 @@ GameEntity = Class {
 			love.graphics.setColor(255, 0, 0, 128)
 			love.graphics.rectangle("fill", x, y, w, h)
 		end
+		]]--
 	end
 }
 
