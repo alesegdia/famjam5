@@ -10,7 +10,7 @@ Bullet = Class {
 	init = function(self, stage, x, y, vy, faction)
 		local anim
 		if faction == constants.BULLET_INVADER then
-			anim = newAnimation( Image.bala1x2, 1, 2, 0.2, 1 )
+			anim = newAnimation( Image.bala1x2, 2, 4, 0.2, 1 )
 		else
 			anim = newAnimation( Image.bala2x2, 2, 2, 0.2, 1 )
 		end
@@ -24,6 +24,7 @@ Bullet = Class {
 			if item.faction == constants.BULLET_INVADER then
 				return nil
 			elseif item.faction == constants.BULLET_HUMAN then
+				CAM_SHAKE = 5
 				return "cross"
 			end
 		elseif other.isHuman then
