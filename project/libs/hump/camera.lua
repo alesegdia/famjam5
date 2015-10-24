@@ -56,6 +56,12 @@ function camera:rotate(phi)
 	return self
 end
 
+function camera:place(x,y)
+	self.x, self.y = x, y
+	return self
+end
+
+
 function camera:rotateTo(phi)
 	self.rot = phi
 	return self
