@@ -24,8 +24,6 @@ Human = Class {
 			local bullet = other.entity
 			if bullet.faction == constants.BULLET_HUMAN then
 				return nil
-			elseif bullet.faction == constants.BULLET_INVADER then
-				return "cross"
 			end
 		end
 	end,
