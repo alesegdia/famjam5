@@ -10,6 +10,13 @@ local Constants = {
 	-- INVADER
 	INVADER_COOLDOWN 		= 3,
 
+	-- HUMAN
+	HUMAN_COOLDOWN 			= 0.5,
+	HUMAN_SPEED 			= 1,
+	HUMAN_HEALTH 			= 10,
+	HUMAN_START_X 			= 100,
+	HUMAN_START_Y 			= 132,
+
 	-- SHIELD
 	SHIELD_HEALTH 			= 5,
 
