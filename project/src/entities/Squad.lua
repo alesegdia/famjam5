@@ -36,9 +36,9 @@ Squad = Class{
 
 
 		if love.keyboard.isDown("a") then
-			self:moveHorizontal(-1)
+			self:moveHorizontal(-1 * 0.5)
 		elseif love.keyboard.isDown("d") then
-			self:moveHorizontal(1)
+			self:moveHorizontal(1 * 0.5)
 		end
 	end,
 
@@ -76,12 +76,6 @@ Squad = Class{
 	end,
 
 	moveHorizontal = function( self, dx )
-		local filter = function(item, other)
-			if 		other.isInvader 	then return "cross"
-			elseif 	other.isBleh 		then return "touch"
-			else return nil
-			end
-		end
 		if self:canMoveHorizontal( dx ) then
 			for _,invader_row in ipairs(self.invaders) do
 				for _,invader in ipairs(invader_row) do
