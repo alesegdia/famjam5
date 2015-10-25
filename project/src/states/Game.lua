@@ -53,10 +53,8 @@ function Game:enter()
 	theme:stop()
 	theme:play()
 	if INVADERS_LAYOUT == nil then
-		print("newone")
 		squad = Squad(stage, 6, 6)
 	else
-		print("RELOAD!")
 		squad = Squad(stage, 6, 6, INVADERS_LAYOUT)
 	end
 	human = Human(stage)
@@ -69,19 +67,30 @@ function Game:enter()
 	cam:zoomTo(scale)
 end
 
-local checkInvaderOverMouse = function(x,y)
+local checkInvaderOverMouse = function(x,y,button)
+	button = button or "l"
 	x, y = cam:worldCoords( x, y )
-	local items, len = world:queryPoint( x, y, function(item) return item.isInvader end )
+	--local items, len = world:queryPoint( x, y, function(item) return item.isInvader or item.isDebris end )
+	local items, len = world:queryRect( x-8, y-8, 16, 16, function(item) return item.isInvader or item.isDebris end )
 	if len ~= 0 then
-		local invader = items[len].entity
-		invader:shoot()
+		if items[len].isInvader then
+			local invader = items[len].entity
+			if button == "l" then
+				invader:shoot()
+			elseif button == "r" then
+				invader:launch(human)
+			end
+		elseif items[len].isDebris then
+			items[len].entity.dead = true
+			GAME_SCORE = GAME_SCORE + 1000
+		end
 	end
 end
 
 local mousePressed = false
-function Game:mousepressed()
+function Game:mousepressed(x, y, button)
 	mousePressed = true
-	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY() )
+	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY(), button )
 end
 
 function Game:mousereleased()
@@ -101,7 +110,7 @@ function Game:update( dt )
 	stage:update(dt)
 
 	-- end game
-	if LEVEL >= 5 then
+	if LEVEL >= 3 then
 		config_win()
 		Gamestate.switch(TextScreen)
 	end
@@ -132,8 +141,10 @@ function Game:update( dt )
 end
 
 function drawHumanHealth( x, y, full_bar_size )
-	local current_bar_size = human.health * full_bar_size / constants.HUMAN_HEALTH
-	love.graphics.setColor(0, 255, 0, 255)
+	local t = human.maxhealth
+	if t == 0 then t = 1 end
+	local current_bar_size = human.health * full_bar_size / t
+	love.graphics.setColor(255, 0, 0, 255)
 	love.graphics.rectangle("fill", x, y, current_bar_size, 2)
 end
 
