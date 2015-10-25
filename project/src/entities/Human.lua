@@ -5,7 +5,7 @@ local constants 	= require ("constants")
 require "src.entities.GameEntity"
 require "src.entities.Bullet"
 
-local shoot_points = { 10, 54, 100, 144, 192 }
+local shoot_points = { 10, 54, 100, 144, 196 }
 
 Human = Class {
 
@@ -25,6 +25,25 @@ Human = Class {
 		anim:addFrame( 0, 0, 12, 8, 0.5 )
 		anim:addFrame( 12, 0, 12, 8, 0.5 )
 		self = GameEntity.init(self, stage, constants.HUMAN_START_X, constants.HUMAN_START_Y, anim, { isHuman = true }, self.step)
+		if LEVEL == 0 then
+			self.health = constants.LEVEL1_HUMAN_HEALTH
+			self.maxhealth = constants.LEVEL1_HUMAN_HEALTH
+			self.numShots = constants.LEVEL1_HUMAN_SHOOTS
+			self.vx = constants.LEVEL1_HUMAN_SPEED
+		end
+		if LEVEL == 1 then
+			self.health = constants.LEVEL2_HUMAN_HEALTH
+			self.maxhealth = constants.LEVEL2_HUMAN_HEALTH
+			self.numShots = constants.LEVEL2_HUMAN_SHOOTS
+			self.vx = constants.LEVEL2_HUMAN_SPEED
+		end
+		if LEVEL == 2 then
+			self.health = constants.LEVEL3_HUMAN_HEALTH
+			self.maxhealth = constants.LEVEL3_HUMAN_HEALTH
+			self.numShots = constants.LEVEL3_HUMAN_SHOOTS
+			self.vx = constants.LEVEL3_HUMAN_SPEED
+		end
+
 	end,
 
 	humanFilter = function(item, other)
