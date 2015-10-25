@@ -32,32 +32,47 @@ Squad = Class{
 		self.invaders = {}
 		self.height = 0
 
-		print("==========")
 		for x = 1, slots_x do
 			self.invaders[x] = {}
 			for y = 1, slots_y do
 				self:createInvaderAtSlot(x, y)
 				self.invaders[x][y].level = 1
+				self.invaders[x][y].levelshot = 1
 				if layout ~= nil then
 					if not layout[x][y].isPresent then
 						self.invaders[x][y].dead = true
 					else
 						self.invaders[x][y].level = layout[x][y].level
-						print("level: ", layout[x][y].level)
+						self.invaders[x][y].levelshot = layout[x][y].levelshot
 					end
 				end
+				self.invaders[x][y].tint.g = 255
 				if self.invaders[x][y].level == 3 then
-					self.invaders[x][y].tint.g = 128 self.invaders[x][y].tint.b = 128
-					self.invaders[x][y].health = 4
+					self.invaders[x][y].tint.b = 255
+					self.invaders[x][y].health = 6
 				end
 				if self.invaders[x][y].level == 2 then
-					self.invaders[x][y].tint.g = 192 self.invaders[x][y].tint.b = 192
-					self.invaders[x][y].health = 2
+					self.invaders[x][y].tint.b = 128
+					self.invaders[x][y].health = 3
 				end
 				if self.invaders[x][y].level == 1 then
-					self.invaders[x][y].tint.g = 255 self.invaders[x][y].tint.b = 255
+					self.invaders[x][y].tint.b = 0
 					self.invaders[x][y].health = 1
 				end
+				if self.invaders[x][y].levelshot == 3 then
+					self.invaders[x][y].tint.r = 255
+					self.invaders[x][y].maxCool = 0.5
+				end
+				if self.invaders[x][y].levelshot == 2 then
+					self.invaders[x][y].tint.r = 128
+					self.invaders[x][y].maxCool = 2
+				end
+				if self.invaders[x][y].levelshot == 1 then
+					self.invaders[x][y].tint.r = 0
+					self.invaders[x][y].maxCool = 4
+				end
+				local sum = self.invaders[x][y].level + self.invaders[x][y].levelshot
+				self.invaders[x][y].tint.g = 255 - 255/6 * sum
 			end
 		end
 	end,
@@ -82,6 +97,7 @@ Squad = Class{
 			for y = 1, self.slots_y do
 				layout[x][y] = {
 					level = self.invaders[x][y].level,
+					levelshot = self.invaders[x][y].levelshot,
 					isPresent = self.invaders[x][y] and not self.invaders[x][y].dead
 				}
 			end
@@ -138,7 +154,9 @@ Squad = Class{
 		local invader1_anim = newAnimation( img, 8, 8, 0.2, 2 )
 		invader1_anim:addFrame( 0, 0, 8, 8, 0.2 )
 		invader1_anim:addFrame( 8, 0, 8, 8, 0.2 )
-		return Invader( self.stage, x, y, invader1_anim )
+		local inv = Invader( self.stage, x, y, invader1_anim )
+		inv.squad = self
+		return inv
 	end,
 
 	invaderFilter = function (item, other)
@@ -153,7 +171,7 @@ Squad = Class{
 		if self:canMoveHorizontal( dx ) then
 			for _,invader_row in ipairs(self.invaders) do
 				for _,invader in ipairs(invader_row) do
-					if not invader.dead then
+					if not invader.dead and invader.attached then
 						local x, y = self.stage.world:getRect(invader.aabb)
 						self.stage.world:move(invader.aabb, x + dx, y, self.invaderFilter)
 					end
@@ -166,7 +184,7 @@ Squad = Class{
 		local canMove = true
 		for _,invader_row in ipairs(self.invaders) do
 			for _,invader in ipairs(invader_row) do
-				if not invader.dead then
+				if not invader.dead and invader.attached then
 					local newpos = invader.pos.x + dx
 					if newpos < constants.SQUAD_MIN_X or newpos > constants.SQUAD_MAX_X then
 						canMove = false
