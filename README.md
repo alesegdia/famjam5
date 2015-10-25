@@ -1,11 +1,11 @@
 # Sreda Vniecaps
 
-## A game made for the Familiar Game Jam #5
-
 Inverted space invaders with strategyish tints
+
+A game made with <3 for the Familiar Game Jam #5
 
 ## Authoring
 
-* **nnkz** + **jjbernal** - graphics
-* **rolemusic** - sfx, music
-* **me** - dev
+* gfx - **nnkz** / **jjbernal**
+* sfx/music - **rolemusic**
+* dev - **me**
