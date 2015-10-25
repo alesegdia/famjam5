@@ -23,6 +23,4 @@ Inverted space invaders with a strategyish touch. Made with <3 for the Familiar 
 
  * *gfx* - **nnkz** / **jjbernal**
  * *sfx/music* - **rolemusic**
- * *sfx/music* - **rolemusic**
- * *dev* - **me**
  * *dev* - **me**
