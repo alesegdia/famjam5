@@ -24,9 +24,10 @@ Shield = Class {
 	end,
 
 	step = function(self, dt)
-		self.tint.g = self.health * 255 / constants.SHIELD_HEALTH
-		self.tint.b = self.health * 255 / constants.SHIELD_HEALTH
-		self.tint.r = (255 - self.tint.g) / 2 + self.tint.g
+		local percent = self.health / constants.SHIELD_HEALTH
+		self.tint.g = 0
+		self.tint.b = 255 * percent
+		self.tint.r = 255 * (1-percent)
 		if self.health <= 0 then self.dead = true end
 		local selected_anim_index = math.ceil(9 * self.health / constants.SHIELD_HEALTH)
 		if selected_anim_index == 0 then selected_anim_index = 1 end
