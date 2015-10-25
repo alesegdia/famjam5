@@ -83,7 +83,7 @@ function MidStage:draw()
 	love.graphics.printf("GO WASTE SOME POINTS!".. "", 0, 64, center.x * 2, "center")
 	love.graphics.printf(GAME_SCORE .. "", 0, 380, center.x * 2, "center")
 	love.graphics.setFont(smallFont)
-	love.graphics.printf("left click: defense upgrade\nright click: attack upgrade\nclick on free slot: new invader", 0, 450, center.x * 2, "center")
+	love.graphics.printf("left click: defense upgrade\nright click: attack upgrade\nclick on free slot: new invader\n\nenter to next level", 0, 450, center.x * 2, "center")
 	for x=1,6 do
 		for y=1,6 do
 			local inv
@@ -127,6 +127,6 @@ function MidStage:draw()
 	if notEnoughMoney > 0 then
 		love.graphics.setFont(bigFont)
 		love.graphics.setColor(255,0,0,255)
-		love.graphics.printf("not enough money", 0, 530, center.x * 2, "center")
+		love.graphics.printf("not enough money", 0, 230, center.x * 2, "center")
 	end
 end
