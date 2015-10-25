@@ -11,7 +11,11 @@ function MidStage:enter()
 
 end
 
-function MidStage:update()
+local time = 0
+local notEnoughMoney = 0
+function MidStage:update(dt)
+	time = time + dt
+	if notEnoughMoney >= 0 then notEnoughMoney = notEnoughMoney - dt end
 	if love.keyboard.isDown("return") then
 		Gamestate.switch(Game)
 	end
@@ -23,26 +27,43 @@ local dist = function(x1, y1, x2, y2)
 	return math.sqrt( xx * xx + yy * yy )
 end
 
+
 function MidStage:mousepressed(mx, my, button)
 	for x=1,6 do
 		for y=1,6 do
 			local xx = 24 + x * 20 + 4
 			local yy = 20 + y * 10 + 4
 			if dist(mx, my, xx*4, yy*4) < 5*4 then
-				print("click ", x, y)
 				local inv = INVADERS_LAYOUT[x][y]
 				if inv.isPresent then
-					if inv.level == 1 and GAME_SCORE - constants.COST_UPGRADE_INVADER1 >= 0 then
-						inv.level = inv.level + 1
-						GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER1
-					elseif inv.level == 2 and GAME_SCORE - constants.COST_UPGRADE_INVADER2 >= 0 then
-						inv.level = inv.level + 1
-						GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER2
+					if button == "l" then
+						if inv.level == 1 and GAME_SCORE - constants.COST_UPGRADE_INVADER1 >= 0 then
+							inv.level = inv.level + 1
+							GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER1
+						elseif inv.level == 2 and GAME_SCORE - constants.COST_UPGRADE_INVADER2 >= 0 then
+							inv.level = inv.level + 1
+							GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER2
+						elseif inv.level ~= 3 then
+							notEnoughMoney = 1
+						end
+					elseif button == "r" then
+						if inv.levelshot == 1 and GAME_SCORE - constants.COST_UPGRADE_INVADER1 >= 0 then
+							inv.levelshot = inv.levelshot + 1
+							GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER1
+						elseif inv.levelshot == 2 and GAME_SCORE - constants.COST_UPGRADE_INVADER2 >= 0 then
+							inv.levelshot = inv.levelshot + 1
+							GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER2
+						elseif inv.levelshot ~= 3 then
+							notEnoughMoney = 1
+						end
 					end
 				elseif GAME_SCORE - constants.COST_CREATE_INVADER >= 0 then
 					GAME_SCORE = GAME_SCORE - constants.COST_CREATE_INVADER
 					inv.isPresent = true
 					inv.level = 1
+					inv.levelshot = 1
+				else
+					notEnoughMoney = 1
 				end
 			end
 		end
@@ -54,12 +75,15 @@ local center = {
         y = love.graphics.getHeight()/2,
     }
 
+local smallFont = love.graphics.newFont("space_invaders.ttf", 16)
 local theQuad = love.graphics.newQuad(0, 0, 8, 8, 16, 8)
 function MidStage:draw()
 	love.graphics.setColor(255,255,255,255)
 	love.graphics.setFont(bigFont)
 	love.graphics.printf("GO WASTE SOME POINTS!".. "", 0, 64, center.x * 2, "center")
-	love.graphics.printf(GAME_SCORE .. "", 0, 450, center.x * 2, "center")
+	love.graphics.printf(GAME_SCORE .. "", 0, 380, center.x * 2, "center")
+	love.graphics.setFont(smallFont)
+	love.graphics.printf("left click: defense upgrade\nright click: attack upgrade\nclick on free slot: new invader", 0, 450, center.x * 2, "center")
 	for x=1,6 do
 		for y=1,6 do
 			local inv
@@ -77,16 +101,32 @@ function MidStage:draw()
 				elseif y == 5 then inv = Image.i5
 				elseif y == 6 then inv = Image.i6
 				end
+				local r,g,b
+				g = 255
 				if invader.level == 1 then
-					love.graphics.setColor(0, 255, 255, 255)
+					b = 0
 				elseif invader.level == 2 then
-					love.graphics.setColor(0, 192, 192, 255)
+					b = 128
 				elseif invader.level == 3 then
-					love.graphics.setColor(0, 128, 128, 255)
+					b = 255
 				end
-
+				if invader.levelshot == 1 then
+					r = 0
+				elseif invader.levelshot == 2 then
+					r = 128
+				elseif invader.levelshot == 3 then
+					r = 255
+				end
+				local sum = invader.level + invader.levelshot
+				g = 255 - 255/6 * sum
+				love.graphics.setColor(r,g,b,255)
 				love.graphics.draw( inv, theQuad, xx * 4, yy * 4, 0, 4, 4)
 			end
 		end
+	end
+	if notEnoughMoney > 0 then
+		love.graphics.setFont(bigFont)
+		love.graphics.setColor(255,0,0,255)
+		love.graphics.printf("not enough money", 0, 530, center.x * 2, "center")
 	end
 end
