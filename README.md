@@ -20,9 +20,9 @@ Inverted space invaders with a strategyish touch. Made with <3 for the Familiar 
 
 ## Authors
 
-| Who? | What? |
-|---------|---------|
-| nnkz | gfx |
-| jjbernal | gfx  |
-| rolemusic  | gfx, sfx |
-| me | gamecode |
+
+ * *gfx* - **nnkz** / **jjbernal**
+ * *sfx/music* - **rolemusic**
+ * *sfx/music* - **rolemusic**
+ * *dev* - **me**
+ * *dev* - **me**
