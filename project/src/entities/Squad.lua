@@ -77,6 +77,25 @@ Squad = Class{
 		end
 	end,
 
+	hasReached = function(self)
+		local didSelect = false
+		local lastRow = 0
+		for y=1,6 do
+			local any = false
+			for x=1,6 do
+				if not self.invaders[x][y].dead then
+					any = true
+					break
+				end
+			end
+			if not any and not didSelect then
+				lastRow = y
+			end
+		end
+
+		return self.height >= 6 + lastRow
+	end,
+
 	numInvaders = function(self)
 		local num_invaders = 0
 		for _,invader_row in ipairs(self.invaders) do

@@ -139,7 +139,7 @@ function Game:update( dt )
 	end
 
 	-- reach condition
-	if squad.height >= 6 then
+	if squad:hasReached() then
 		config_reach()
 		Gamestate.switch(TextScreen)
 	end
