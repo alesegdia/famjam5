@@ -43,6 +43,13 @@ config_humanwin = function()
 	TEXT_SCREEN_TXT = "Anyway, you made them score " .. GAME_SCORE
 end
 
+config_instructions = function()
+	IS_MIRROR = false
+	TEXT_SCREEN_TITLE = "INSTRUCTIONS"
+	TEXT_SCREEN_MID = "\n\n\n\n\n\na/s - movement\nleft click - shoot/capture debris\nright click - launch invader"
+	TEXT_SCREEN_TXT = ""
+end
+
 TEXT_SCREEN_TITLE = ""
 TEXT_SCREEN_MID = ""
 TEXT_SCREEN_TXT = ""
@@ -59,11 +66,15 @@ function TextScreen:enter()
 end
 
 
+local pwupsfx = love.audio.newSource("sfx/power.ogg")
+
 local prev_space =true 
 function TextScreen:update()
 	local just_space = love.keyboard.isDown(" ")
 	if just_space and not prev_space then
 		prev_space = true
+		pwupsfx:stop()
+		pwupsfx:play()
 		Gamestate.switch(Menu)
 	end
 	if not just_space then prev_space = false end
