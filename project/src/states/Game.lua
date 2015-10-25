@@ -35,6 +35,7 @@ local bigFont   = love.graphics.newFont("space_invaders.ttf", 32)
 local smallFont = love.graphics.newFont("space_invaders.ttf", 16)
 local xsFont= love.graphics.newFont("space_invaders.ttf", 8)
 
+local pwupsfx = love.audio.newSource("sfx/power.ogg")
 
 -- GAME -------------------
 local world 	= bump.newWorld(8)
@@ -67,7 +68,7 @@ function Game:enter()
 	cam:zoomTo(scale)
 end
 
-local checkInvaderOverMouse = function(x,y,button)
+local checkInvaderOverMouse = function(x,y,button,checkdebris)
 	button = button or "l"
 	x, y = cam:worldCoords( x, y )
 	--local items, len = world:queryPoint( x, y, function(item) return item.isInvader or item.isDebris end )
@@ -81,8 +82,12 @@ local checkInvaderOverMouse = function(x,y,button)
 				invader:launch(human)
 			end
 		elseif items[len].isDebris then
-			items[len].entity.dead = true
-			GAME_SCORE = GAME_SCORE + 1000
+			if checkdebris then
+				pwupsfx:stop()
+				pwupsfx:play()
+				items[len].entity.dead = true
+				GAME_SCORE = GAME_SCORE + 1000
+			end
 		end
 	end
 end
@@ -90,7 +95,7 @@ end
 local mousePressed = false
 function Game:mousepressed(x, y, button)
 	mousePressed = true
-	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY(), button )
+	checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY(), button, true )
 end
 
 function Game:mousereleased()
@@ -99,7 +104,7 @@ end
 
 function Game:mousemoved()
 	if mousePressed then
-		checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY() )
+		checkInvaderOverMouse( love.mouse.getX(), love.mouse.getY(), nil)
 	end
 end
 
@@ -119,7 +124,12 @@ function Game:update( dt )
 	if human.health <= 0 then
 		INVADERS_LAYOUT = squad:createLayout()
 		LEVEL = LEVEL + 1
-		Gamestate.switch(MidStage)
+		if LEVEL < 3 then
+			Gamestate.switch(MidStage)
+		else
+			config_win()
+			Gamestate.switch(TextScreen)
+		end
 	end
 
 	-- no more invaders
@@ -138,14 +148,17 @@ function Game:update( dt )
 		CAM_SHAKE = CAM_SHAKE - dt * 20
 	end
 	if CAM_SHAKE < 0 then CAM_SHAKE = 0 end
+
 end
 
 function drawHumanHealth( x, y, full_bar_size )
-	local t = human.maxhealth
-	if t == 0 then t = 1 end
-	local current_bar_size = human.health * full_bar_size / t
-	love.graphics.setColor(255, 0, 0, 255)
-	love.graphics.rectangle("fill", x, y, current_bar_size, 2)
+	if human.maxhealth then
+		local t = human.maxhealth
+		if t == 0 then t = 1 end
+		local current_bar_size = human.health * full_bar_size / t
+		love.graphics.setColor(255, 0, 0, 255)
+		love.graphics.rectangle("fill", x, y, current_bar_size, 2)
+	end
 end
 
 function drawGUI()
