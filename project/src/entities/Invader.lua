@@ -9,6 +9,10 @@ require "src.entities.Debris"
 
 local xsFont= love.graphics.newFont("space_invaders.ttf", 8)
 
+local shootsfx = love.audio.newSource("sfx/disparo.ogg")
+
+local choquesfx = love.audio.newSource("sfx/choqueH.ogg")
+
 Invader = Class {
 
 	cooldown = 0,
@@ -42,6 +46,10 @@ Invader = Class {
 			for i=1,len do
 				local col = cols[i]
 				if col.other.isHuman then
+					CAM_SHAKE = 10
+					choquesfx:setPitch(1.5)
+					choquesfx:stop()
+					choquesfx:play()
 					didDebris = true
 					self.health = 0
 					col.other.entity.health = col.other.entity.health - 2
@@ -67,6 +75,8 @@ Invader = Class {
 
 	shoot = function(self)
 		if self.cooldown <= 0 then
+			shootsfx:stop()
+			shootsfx:play()
 			self.cooldown = self.maxCool
 			local bullet = Bullet( self.stage, self.pos.x, self.pos.y, -constants.INVADER_SHOOT_SPEED, constants.BULLET_INVADER )
 		end
