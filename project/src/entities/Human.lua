@@ -106,6 +106,12 @@ Human = Class {
 				if self.pos.x < constants.SQUAD_MIN_X or self.pos.x > constants.SQUAD_MAX_X then
 					self.direction = self.direction * -1
 				end
+				if self.pos.x < constants.SQUAD_MIN_X then
+					self.stage.world:move(self.aabb, constants.SQUAD_MIN_X, self.pos.y - self.anim:getHeight()/2, self.humanFilter)
+				end
+				if self.pos.x > constants.SQUAD_MAX_X then
+					self.stage.world:move(self.aabb, constants.SQUAD_MAX_X, self.pos.y - self.anim:getHeight()/2, self.humanFilter)
+				end
 				self.stage.world:move(self.aabb, self.pos.x - self.anim:getWidth()/2 + self.direction * self.vx * dt, self.pos.y - self.anim:getHeight()/2, self.humanFilter)
 			end
 		end
