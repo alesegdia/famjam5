@@ -22,9 +22,6 @@ Squad = Class{
 		if y == 5 then img = Image.i5 end
 		if y == 6 then img = Image.i6 end
 		self.invaders[x][y] = self:makeInvaderN(x * 20, 78 + y * 10, img)
-		if y == 1 then self.invaders[x][y].tint.g = 128 self.invaders[x][y].tint.b = 128 end
-		if y == 2 then self.invaders[x][y].tint.g = 192 self.invaders[x][y].tint.b = 192 end
-		if y == 3 then self.invaders[x][y].tint.g = 255 self.invaders[x][y].tint.b = 255 end
 	end,
 
 	init = function(self, stage, slots_x, slots_y, layout)
@@ -40,10 +37,26 @@ Squad = Class{
 			self.invaders[x] = {}
 			for y = 1, slots_y do
 				self:createInvaderAtSlot(x, y)
+				self.invaders[x][y].level = 1
 				if layout ~= nil then
 					if not layout[x][y].isPresent then
 						self.invaders[x][y].dead = true
+					else
+						self.invaders[x][y].level = layout[x][y].level
+						print("level: ", layout[x][y].level)
 					end
+				end
+				if self.invaders[x][y].level == 3 then
+					self.invaders[x][y].tint.g = 128 self.invaders[x][y].tint.b = 128
+					self.invaders[x][y].health = 4
+				end
+				if self.invaders[x][y].level == 2 then
+					self.invaders[x][y].tint.g = 192 self.invaders[x][y].tint.b = 192
+					self.invaders[x][y].health = 2
+				end
+				if self.invaders[x][y].level == 1 then
+					self.invaders[x][y].tint.g = 255 self.invaders[x][y].tint.b = 255
+					self.invaders[x][y].health = 1
 				end
 			end
 		end
@@ -67,11 +80,10 @@ Squad = Class{
 		for x = 1, self.slots_x do
 			layout[x] = {}
 			for y = 1, self.slots_y do
-				print("selfinvxy: ", self.invaders[x][y])
-				print("selfdead: ", self.invaders[x][y].dead)
-				layout[x][y] = {isPresent = self.invaders[x][y] and not self.invaders[x][y].dead}
-				print(layout[x][y].isPresent)
-				print("=========")
+				layout[x][y] = {
+					level = self.invaders[x][y].level,
+					isPresent = self.invaders[x][y] and not self.invaders[x][y].dead
+				}
 			end
 		end
 		return layout

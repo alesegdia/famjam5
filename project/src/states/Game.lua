@@ -33,6 +33,7 @@ local scale = 4
 
 local bigFont   = love.graphics.newFont("space_invaders.ttf", 32)
 local smallFont = love.graphics.newFont("space_invaders.ttf", 16)
+local xsFont= love.graphics.newFont("space_invaders.ttf", 8)
 
 
 -- GAME -------------------
@@ -100,7 +101,7 @@ function Game:update( dt )
 	stage:update(dt)
 
 	-- end game
-	if LEVEL >= 2 then
+	if LEVEL >= 5 then
 		config_win()
 		Gamestate.switch(TextScreen)
 	end
@@ -138,6 +139,9 @@ end
 
 function drawGUI()
 	drawHumanHealth( 8, 3, 184 )
+	love.graphics.setColor(255,255,255,255)
+	love.graphics.setFont(xsFont)
+	love.graphics.print("SCORE: " .. GAME_SCORE, 2, 140)
 end
 
 function Game:draw()

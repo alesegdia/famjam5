@@ -43,14 +43,18 @@ Bullet = Class {
 		for i=1,len do
 			local col = cols[i]
 			if col.other.isHuman and self.aabb.faction == constants.BULLET_INVADER then
+				GAME_SCORE = GAME_SCORE + constants.SCORE_HIT_HUMAN
 				self.dead = true
 				col.other.entity.health = col.other.entity.health - 1
+				if col.other.entity.health <= 0 then GAME_SCORE = GAME_SCORE + constants.SCORE_KILL_HUMAN end
 			elseif col.other.isInvader and self.aabb.faction == constants.BULLET_HUMAN then
 				self.dead = true
 				col.other.entity.health = col.other.entity.health - 1
 			elseif col.other.isShield then
+				GAME_SCORE = GAME_SCORE + constants.SCORE_HIT_SHIELD
 				col.other.entity.health = col.other.entity.health - 1
 				self.dead = true
+				if col.other.entity.health <= 0 then GAME_SCORE = GAME_SCORE + constants.SCORE_BREAK_SHIELD end
 			end
 		end
 	end
