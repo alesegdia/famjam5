@@ -19,9 +19,14 @@ Human = Class {
 	nextShot = 0,
 	state = "moving",
 	lastShotPoint = 0,
+	maxhealth = 10,
 
 	init = function( self, stage )
-		local anim = newAnimation( Image.human, 12, 8, 0.5, 2 )
+		local img
+		if LEVEL == 0 then img = Image.human end
+		if LEVEL == 1 then img = Image.human2 end
+		if LEVEL == 2 then img = Image.human3 end
+		local anim = newAnimation( img, 12, 8, 0.5, 2 )
 		anim:addFrame( 0, 0, 12, 8, 0.5 )
 		anim:addFrame( 12, 0, 12, 8, 0.5 )
 		self = GameEntity.init(self, stage, constants.HUMAN_START_X, constants.HUMAN_START_Y, anim, { isHuman = true }, self.step)
@@ -30,19 +35,23 @@ Human = Class {
 			self.maxhealth = constants.LEVEL1_HUMAN_HEALTH
 			self.numShots = constants.LEVEL1_HUMAN_SHOOTS
 			self.vx = constants.LEVEL1_HUMAN_SPEED
+			self.timeBetweenShot = constants.LEVEL1_HUMAN_COOLDOWN
 		end
 		if LEVEL == 1 then
 			self.health = constants.LEVEL2_HUMAN_HEALTH
 			self.maxhealth = constants.LEVEL2_HUMAN_HEALTH
 			self.numShots = constants.LEVEL2_HUMAN_SHOOTS
 			self.vx = constants.LEVEL2_HUMAN_SPEED
+			self.timeBetweenShot = constants.LEVEL2_HUMAN_COOLDOWN
 		end
 		if LEVEL == 2 then
 			self.health = constants.LEVEL3_HUMAN_HEALTH
 			self.maxhealth = constants.LEVEL3_HUMAN_HEALTH
 			self.numShots = constants.LEVEL3_HUMAN_SHOOTS
 			self.vx = constants.LEVEL3_HUMAN_SPEED
+			self.timeBetweenShot = constants.LEVEL3_HUMAN_COOLDOWN
 		end
+		self.damaged = 0
 
 	end,
 
@@ -68,6 +77,15 @@ Human = Class {
 	end,
 
 	step = function(self, dt)
+		if self.damaged > 0 then
+			self.tint.g = 255 - 255 * self.damaged
+			self.tint.b = 255 - 255 * self.damaged
+			self.damaged = self.damaged - dt
+		else
+			self.tint.g = 255
+			self.tint.b = 255
+			self.tint.r = 255
+		end
 		if self.health <= 0 then self.dead = true end
 		if self.state == "shooting" then
 			self.nextShot = self.nextShot - dt
