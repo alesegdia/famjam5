@@ -41,7 +41,7 @@ local logo = newAnimation( Image.logo, 200, 150, 0.2, 1 )
 function Menu:update()
 	local just_s = love.keyboard.isDown("s")
 	local just_a = love.keyboard.isDown("w")
-	local just_space = love.keyboard.isDown(" ")
+	local just_space = love.keyboard.isDown("space")
 
 	if just_s and not prev_s then
 		chocasfx:stop()

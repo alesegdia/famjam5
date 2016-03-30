@@ -69,16 +69,16 @@ function Game:enter()
 end
 
 local checkInvaderOverMouse = function(x,y,button,checkdebris)
-	button = button or "l"
+	button = button or 1
 	x, y = cam:worldCoords( x, y )
 	--local items, len = world:queryPoint( x, y, function(item) return item.isInvader or item.isDebris end )
 	local items, len = world:queryRect( x-8, y-8, 16, 16, function(item) return item.isInvader or item.isDebris end )
 	if len ~= 0 then
 		if items[len].isInvader then
 			local invader = items[len].entity
-			if button == "l" then
+			if button == 1 then
 				invader:shoot()
-			elseif button == "r" then
+			elseif button == 2 then
 				invader:launch(human)
 			end
 		elseif items[len].isDebris then

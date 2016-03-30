@@ -70,7 +70,7 @@ local pwupsfx = love.audio.newSource("sfx/power.ogg")
 
 local prev_space =true 
 function TextScreen:update()
-	local just_space = love.keyboard.isDown(" ")
+	local just_space = love.keyboard.isDown("space")
 	if just_space and not prev_space then
 		prev_space = true
 		pwupsfx:stop()

@@ -36,7 +36,7 @@ function MidStage:mousepressed(mx, my, button)
 			if dist(mx, my, xx*4, yy*4) < 5*4 then
 				local inv = INVADERS_LAYOUT[x][y]
 				if inv.isPresent then
-					if button == "l" then
+					if button == 1 then
 						if inv.level == 1 and GAME_SCORE - constants.COST_UPGRADE_INVADER1 >= 0 then
 							inv.level = inv.level + 1
 							GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER1
@@ -46,7 +46,7 @@ function MidStage:mousepressed(mx, my, button)
 						elseif inv.level ~= 3 then
 							notEnoughMoney = 1
 						end
-					elseif button == "r" then
+					elseif button == 2 then
 						if inv.levelshot == 1 and GAME_SCORE - constants.COST_UPGRADE_INVADER1 >= 0 then
 							inv.levelshot = inv.levelshot + 1
 							GAME_SCORE = GAME_SCORE - constants.COST_UPGRADE_INVADER1
